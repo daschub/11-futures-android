@@ -1,5 +1,6 @@
 package de.fhro.inf.prg3.a11.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,13 +26,13 @@ public class MealsRecyclerAdapter extends RecyclerView.Adapter<MealsRecyclerAdap
 
     private final List<Meal> meals;
     private final LayoutInflater inflater;
-    private final Context context;
+    private final Activity context;
 
     /**
      * Default constructor
      * @param context context is required to load view elements
      */
-    public MealsRecyclerAdapter(Context context) {
+    public MealsRecyclerAdapter(Activity context) {
         this(context, new LinkedList<>());
     }
 
@@ -40,7 +41,7 @@ public class MealsRecyclerAdapter extends RecyclerView.Adapter<MealsRecyclerAdap
      * @param context context is required to load view elements
      * @param meals initial list of meals
      */
-    public MealsRecyclerAdapter(Context context, List<Meal> meals) {
+    public MealsRecyclerAdapter(Activity context, List<Meal> meals) {
         this.context = context;
         this.meals = Collections.synchronizedList(meals);
         inflater = LayoutInflater.from(context);
@@ -48,17 +49,17 @@ public class MealsRecyclerAdapter extends RecyclerView.Adapter<MealsRecyclerAdap
 
     public void addAll(Meal... meals) {
         this.meals.addAll(Arrays.asList(meals));
-        notifyDataSetChanged();
+        context.runOnUiThread(this::notifyDataSetChanged);
     }
 
     public void addAll(Collection<Meal> meals) {
         this.meals.addAll(meals);
-        notifyDataSetChanged();
+        context.runOnUiThread(this::notifyDataSetChanged);
     }
 
     public void clear() {
         this.meals.clear();
-        notifyDataSetChanged();
+        context.runOnUiThread(this::notifyDataSetChanged);
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,18 +23,14 @@ import com.mikepenz.iconics.context.IconicsLayoutInflater2;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import de.fhro.inf.prg3.a11.openmensa.OpenMensaAPI;
 import de.fhro.inf.prg3.a11.openmensa.OpenMensaAPIService;
 import de.fhro.inf.prg3.a11.adapter.MealsRecyclerAdapter;
 import de.fhro.inf.prg3.a11.openmensa.model.Canteen;
 import de.fhro.inf.prg3.a11.openmensa.model.Meal;
-import de.fhro.inf.prg3.a11.openmensa.model.PageInfo;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
@@ -78,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         mealsListView.setLayoutManager(new LinearLayoutManager(this));
         mealsListView.setAdapter(mealsListAdapter);
 
-        /* TODO initialize canteens spinner */
+        initCanteensSpinner();
     }
 
     /**
@@ -146,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         ).show();
     }
 
-    private void initCanteensSelection() {
+    private void initCanteensSpinner() {
         /* TODO load all canteens and pass them to the canteenAdapter instance
          * hint: the first page is loaded without an index
          * afterwards you have to load the remaining pages with an index
@@ -168,19 +163,5 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         final String dateString = dateFormat.format(currentDate.getTime());
 
         /* TODO load meals and pass them to the helper method `updateMealsListView(...)` to update the view */
-    }
-
-    /**
-     * Helper method to update the meals displayed in the recycler view
-     * as it is not guaranteed in which thread the `thenAccept(...)` method is executed
-     * you are required to do this via `post(...)` on view element as the runnable passed to `post(...)` is executed in the GUI thread
-     *
-     * @param meals meals to display in the view
-     */
-    private void updateMealsListView(List<Meal> meals) {
-        mealsListView.post(() -> {
-            mealsListAdapter.clear();
-            mealsListAdapter.addAll(meals);
-        });
     }
 }

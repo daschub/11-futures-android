@@ -7,8 +7,9 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
         classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.0.12"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.0.22"
     }
 }
 
@@ -17,6 +18,8 @@ allprojects {
         google()
         jcenter()
     }
+
+    apply plugin: 'com.github.ben-manes.versions'
 }
 
 task clean(type: Delete) {
