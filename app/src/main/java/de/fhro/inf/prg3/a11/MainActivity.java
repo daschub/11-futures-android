@@ -25,12 +25,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import de.fhro.inf.prg3.a11.openmensa.OpenMensaAPI;
 import de.fhro.inf.prg3.a11.openmensa.OpenMensaAPIService;
 import de.fhro.inf.prg3.a11.adapter.MealsRecyclerAdapter;
 import de.fhro.inf.prg3.a11.openmensa.model.Canteen;
 import de.fhro.inf.prg3.a11.openmensa.model.Meal;
+import de.fhro.inf.prg3.a11.openmensa.model.PageInfo;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
@@ -149,6 +151,21 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
          * you can create a PageInfo object by passing the return value `Response<T>`
          * you get when you fetch the first page to the static method `extractFromResponse(...)`
          * of the PageInfo class */
+        openMensaAPI.getCanteens().thenApply(listResponse -> {
+            List<Canteen> canteens =  listResponse.body();
+            PageInfo pageInfo = PageInfo.extractFromResponse(listResponse);
+            for(int i = 2; i < pageInfo.getItemCountPerPage(); i++) {
+
+                try {
+                    openMensaAPI.getCanteens(2).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     /**
